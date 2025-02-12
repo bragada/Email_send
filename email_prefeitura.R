@@ -1,4 +1,4 @@
-
+if (!requireNamespace("tidyverse", quietly = TRUE)) install.packages("rmarkdown")
 if (!requireNamespace("rmarkdown", quietly = TRUE)) install.packages("rmarkdown")
 if (!requireNamespace("aws.s3", quietly = TRUE)) install.packages("aws.s3")
 
