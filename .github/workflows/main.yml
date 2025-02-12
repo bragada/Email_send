@@ -1,0 +1,50 @@
+name: EmailPrefeitura
+
+on:
+  schedule:
+    - cron: '0 11 * * 1-5'  # Executa às 8h da manhã (Brasília UTC-3 → UTC-0 é 11h)
+  workflow_dispatch:
+
+jobs:
+  email_prefeitura:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Configurar repositório
+      uses: actions/checkout@v2
+
+    - name: Configurar cache para pacotes R
+      uses: actions/cache@v3
+      with:
+        path: ~/.R/library
+        key: ${{ runner.os }}-R-package-cache-${{ github.run_id }}
+        restore-keys: |
+          ${{ runner.os }}-R-
+      env:
+        R_LIBS_USER: ~/.R/library
+
+    - name: Instalar dependências do sistema
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libharfbuzz-dev libfribidi-dev libfontconfig1-dev libfreetype6-dev libicu-dev libsodium-dev
+
+    - name: Instalar R
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y r-base
+
+    - name: Definir variáveis de ambiente do AWS
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      run: |
+        echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" >> ~/.Renviron
+        echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" >> ~/.Renviron
+        echo "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" >> ~/.Renviron
+
+    - name: Executar script email_prefeitura.R
+      run: |
+        Rscript email_prefeitura.R
+      env:
+        R_LIBS_USER: ~/.R/library
