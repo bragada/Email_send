@@ -27,12 +27,24 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libharfbuzz-dev libfribidi-dev libfontconfig1-dev libfreetype6-dev libicu-dev libsodium-dev
-
+    - name: Instalar Pandoc
+      run: |
+        sudo apt-get install -y pandoc
+        
     - name: Instalar R
       run: |
         sudo apt-get update
         sudo apt-get install -y r-base
-
+    - name: Instalar TinyTeX
+      run: |
+        Rscript -e 'tinytex::install_tinytex()'
+        
+    - name: Reinstalar stringi a partir da fonte
+      run: |
+        Rscript -e 'install.packages("stringi", type = "source")'
+      env:
+        R_LIBS_USER: ~/.R/library
+        
     - name: Definir variáveis de ambiente do AWS
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
