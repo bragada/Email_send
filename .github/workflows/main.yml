@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  email_prefeitura:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,6 +27,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libharfbuzz-dev libfribidi-dev libfontconfig1-dev libfreetype6-dev libicu-dev libsodium-dev
+        
     - name: Instalar Pandoc
       run: |
         sudo apt-get install -y pandoc
@@ -36,31 +37,53 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y r-base
 
-    - name: Instalar pacote tinytex
+    - name: Criar e configurar diretório de bibliotecas R
       run: |
-        Rscript -e 'install.packages("tinytex", repos="https://cran.rstudio.com/")'
+        mkdir -p ~/.R/library
+        echo "R_LIBS_USER=~/.R/library" >> ~/.Renviron
       env:
         R_LIBS_USER: ~/.R/library
-    - name: Instalar TinyTeX
-      run: |
-        Rscript -e 'tinytex::install_tinytex()'
-        
+
     - name: Reinstalar stringi a partir da fonte
       run: |
         Rscript -e 'install.packages("stringi", type = "source")'
       env:
         R_LIBS_USER: ~/.R/library
         
+    - name: Instalar TinyTeX
+      run: |
+        Rscript -e 'tinytex::install_tinytex()'
+    - name: Reinstalar keyring
+      run: |
+        Rscript -e 'install.packages("keyring")'
+      env:
+        R_LIBS_USER: ~/.R/library
     - name: Definir variáveis de ambiente do AWS
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        TZ: ${{ secrets.TZ }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        USERNAME_RIB: ${{ secrets.USERNAME_RIB }}
+        PASSWORD_RIB: ${{ secrets.PASSWORD_RIB }}
+        GMAIL_AUTH: ${{ secrets.GMAIL_AUTH }}
+        SMTP_USER: ${{ secrets.SMTP_USER }}
+        SMTP_PASS: ${{ secrets.SMTP_PASS }}
       run: |
         echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" >> ~/.Renviron
         echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" >> ~/.Renviron
         echo "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" >> ~/.Renviron
-
+        echo "TZ=${TZ}" >> ~/.Renviron
+        echo "USERNAME=${USERNAME}" >> ~/.Renviron
+        echo "PASSWORD=${PASSWORD}" >> ~/.Renviron
+        echo "USERNAME_RIB=${USERNAME_RIB}" >> ~/.Renviron
+        echo "PASSWORD_RIB=${PASSWORD_RIB}" >> ~/.Renviron
+        echo "GMAIL_AUTH=${GMAIL_AUTH}" >> ~/.Renviron
+        echo "SMTP_USER=${SMTP_USER}" >> ~/.Renviron
+        echo "SMTP_PASS=${SMTP_PASS}" >> ~/.Renviron
+        echo "$GMAIL_AUTH" > gmail_credentials.json
     - name: Executar script email_prefeitura.R
       run: |
         Rscript email_prefeitura.R
