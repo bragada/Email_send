@@ -1,9 +1,14 @@
-# Use uma imagem base com Ubuntu
-FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu
+# Usa a imagem otimizada para R
+FROM rocker/tidyverse:latest
 
-# Adicionar a chave do CRAN e o repositório para versões mais recentes do R
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 && \
-    add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
+# Define o diretório de trabalho
+WORKDIR /app
 
-# Atualizar e instalar a versão mais recente do R
-RUN apt update && apt install -y r-base
+# Instala pacotes adicionais necessários
+RUN R -e "install.packages(c('aws.s3', 'rmarkdown',janitor, 'httr', 'jsonlite', 'arrow', 'keyring', 'tinytex'))"
+
+# Copia todos os arquivos do repositório para o container
+COPY . /app
+
+# Comando padrão: executa todos os scripts R em sequência
+CMD Rscript -e "source('email_prefeitura.R')"
