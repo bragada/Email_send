@@ -1,14 +1,9 @@
-FROM rocker/r-ver:latest
+# Use uma imagem base com Ubuntu
+FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu
 
-# Instalar pacotes essenciais do R
-RUN R -e "install.packages(c('tidyverse', 'rmarkdown', 'aws.s3'), repos='http://cran.rstudio.com/')"
+# Adicionar a chave do CRAN e o repositório para versões mais recentes do R
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 && \
+    add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
 
-# Definir o diretório de trabalho dentro do container
-WORKDIR /app
-
-# Copiar os arquivos necessários para dentro do container
-COPY email_prefeitura.R /app/
-COPY script_relatorio.Rmd /app/
-
-# Comando de execução do script
-CMD ["Rscript", "email_prefeitura.R"]
+# Atualizar e instalar a versão mais recente do R
+RUN apt update && apt install -y r-base
