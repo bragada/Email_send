@@ -1,14 +1,12 @@
-# Usa a imagem otimizada para R
-FROM rocker/tidyverse:latest
+FROM rocker/r-ver:latest
 
-# Define o diretório de trabalho
+# Instalar pacotes essenciais do R
+RUN R -e "install.packages(c('tidyverse', 'rmarkdown', 'aws.s3'), repos='http://cran.rstudio.com/')"
+
+# Copiar o script para dentro do contêiner
 WORKDIR /app
+COPY script_relatorio.Rmd /app/
+COPY email_prefeitura.R /app/
 
-# Instala pacotes adicionais necessários
-RUN R -e "install.packages(c('aws.s3', 'rmarkdown',janitor, 'httr', 'jsonlite', 'arrow', 'keyring', 'tinytex'))"
-
-# Copia todos os arquivos do repositório para o container
-COPY . /app
-
-# Comando padrão: executa todos os scripts R em sequência
-CMD Rscript -e "source('email_prefeitura.R')"
+# Definir o comando de execução do script
+CMD ["Rscript", "email_prefeitura.R"]
