@@ -1,4 +1,4 @@
-name: Email Prefeitura
+name: Run R Scripts Every 30 Minutes
 
 on:
   schedule:
@@ -8,20 +8,15 @@ on:
 jobs:
   run-r-scripts:
     runs-on: ubuntu-latest
+    container:
+      image: rocker/tidyverse:latest  # Usa a imagem Docker com R e tidyverse
 
     steps:
       - name: Checkout do repositório
         uses: actions/checkout@v4
 
-      - name: Configurar cache para pacotes R
-        uses: actions/cache@v3
-        with:
-          path: ~/.R/library
-          key: ${{ runner.os }}-R-package-cache-${{ github.run_id }}
-          restore-keys: |
-            ${{ runner.os }}-R-
-        env:
-          R_LIBS_USER: ~/.R/library
+      - name: Instalar pacotes adicionais
+        run: R -e "install.packages(c('aws.s3', 'rmarkdown', 'httr', 'jsonlite', 'arrow', 'keyring', 'tinytex'))"
 
       - name: Definir variáveis de ambiente
         env:
@@ -42,3 +37,4 @@ jobs:
       - name: Executar Scripts R
         run: |
           Rscript email_prefeitura.R
+  
