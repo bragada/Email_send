@@ -40,10 +40,10 @@ jobs:
         Rscript -e 'install.packages("stringi", type = "source")'
       env:
         R_LIBS_USER: ~/.R/library
-        
-    - name: Instalar TinyTeX
+    - name: Verificar TinyTeX instalado
       run: |
-        Rscript -e 'tinytex::install_tinytex()'
+        Rscript -e 'if (!requireNamespace("tinytex", quietly=TRUE)) { install.packages("tinytex") }'
+        Rscript -e 'print(tinytex::is_tinytex())'
     - name: Reinstalar keyring
       run: |
         Rscript -e 'install.packages("keyring")'
