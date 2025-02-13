@@ -15,8 +15,15 @@ jobs:
       - name: Checkout do repositório
         uses: actions/checkout@v4
 
-      - name: Instalar pacotes adicionais
-        run: R -e "install.packages(c('aws.s3', 'rmarkdown', 'httr', 'jsonlite', 'arrow', 'keyring', 'tinytex'))"
+      - name: Instalar TinyTeX
+        run: |
+          Rscript -e "install.packages('tinytex')"
+          Rscript -e "tinytex::install_tinytex()"
+          Rscript -e "tinytex::tlmgr_install('etoolbox')"
+        
+      - name: Instalar pacotes R necessários
+        run: R -e "install.packages(c('tidyverse', 'janitor', 'aws.s3', 'rmarkdown', 'httr', 'jsonlite', 'arrow', 'keyring', 'tinytex'))"
+      
 
       - name: Definir variáveis de ambiente
         env:
