@@ -19,7 +19,7 @@ jobs:
       - name: Install system dependencies for ragg and arrow
         run: |
           sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libfreetype6-dev libpng-dev libtiff5-dev
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libfreetype6-dev libpng-dev libtiff5-dev libfontconfig1-dev
 
       - name: Cache R packages
         id: r-cache
