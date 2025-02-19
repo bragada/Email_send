@@ -1,10 +1,10 @@
-if (!require(tidyverse)) { install.packages("tidyverse", repos = "https://cloud.r-project.org/"); library(tidyverse) }
-if (!require(base64enc)) { install.packages("base64enc", repos = "https://cloud.r-project.org/"); library(base64enc) }
-if (!require(httr)) { install.packages("httr", repos = "https://cloud.r-project.org/"); library(httr) }
-if (!require(jsonlite)) { install.packages("jsonlite", repos = "https://cloud.r-project.org/"); library(jsonlite) }
-if (!require(janitor)) { install.packages("janitor", repos = "https://cloud.r-project.org/"); library(janitor) }
-if (!require(aws.s3)) { install.packages("aws.s3", repos = "https://cloud.r-project.org/"); library(aws.s3) }
-if (!require(arrow)) { install.packages("arrow", repos = "https://cloud.r-project.org/"); library(arrow) }
+if (!require(tidyverse)) { install.packages("tidyverse"); library(tidyverse) }
+if (!require(base64enc)) { install.packages("base64enc"); library(base64enc) }
+if (!require(httr)) { install.packages("httr"); library(httr) }
+if (!require(jsonlite)) { install.packages("jsonlite"); library(jsonlite) }
+if (!require(janitor)) { install.packages("janitor"); library(janitor) }
+if (!require(aws.s3)) { install.packages("aws.s3"); library(aws.s3) }
+if (!require(arrow)) { install.packages("arrow"); library(arrow) }
 #credenciais_rib <- paste0("henrique.bragada", ":", "Ihavemacbook13?") %>%
 #      base64_enc() %>% 
 #      paste("Basic", .)
