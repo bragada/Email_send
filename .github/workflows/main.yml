@@ -32,7 +32,7 @@ jobs:
 
       - name: Install required R packages
         run: |
-          Rscript -e 'install.packages(c("tidyverse")'
+          Rscript -e 'install.packages("tidyverse")'
 
       - name: Definir variáveis de ambiente do AWS e outras
         env:
