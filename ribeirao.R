@@ -53,12 +53,12 @@ corpo_requisicao <- list(
       body = corpo_requisicao,
       encode = "json"
   )
-      
+      print(fromJSON(content(response, "text")))
   if (status_code(response) != 200) {
     message("Erro ao acessar a API de ",nome ,". Status code: ", status_code(response))
     return(status_code(response))
   } 
-  fromJSON(content(response, "text"))
+  
   dados <- fromJSON(content(response, "text")) %>% 
     .[["RAIZ"]] %>%
     .[[raiz_1]] %>%
