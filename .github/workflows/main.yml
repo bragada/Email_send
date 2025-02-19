@@ -79,7 +79,7 @@ jobs:
 
     - name: Executar Ribeirão
       run: |
-        Rscript ribeirao_.R
+        Rscript ribeirao.R
       env:
         R_LIBS_USER: ~/.R/library
         
