@@ -56,7 +56,7 @@ corpo_requisicao <- list(
       
   if (status_code(response) != 200) {
     message("Erro ao acessar a API de ",nome ,". Status code: ", status_code(response))
-    return(NULL)
+    return(status_code(response))
   } 
   
   dados <- fromJSON(content(response, "text")) %>% 
@@ -67,7 +67,7 @@ corpo_requisicao <- list(
   
   if (length(dados) <= 10) {
     message("A base de dados contém 10 ou menos observações. Não será feito o upload.")
-    return(NULL)
+    return(dados)
   }
   
   atendimentos <- dados %>% 
