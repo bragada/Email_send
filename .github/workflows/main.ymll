@@ -14,10 +14,20 @@ jobs:
     - name: Configurar repositório
       uses: actions/checkout@v2
 
+    - name: Configurar cache para pacotes R
+      uses: actions/cache@v3
+      with:
+        path: ~/.R/library
+        key: ${{ runner.os }}-R-package-cache-${{ github.run_id }}
+        restore-keys: |
+          ${{ runner.os }}-R-
+      env:
+        R_LIBS_USER: ~/.R/library
+
     - name: Instalar dependências do sistema
       run: |
         sudo apt-get update
-        sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libharfbuzz-dev libfribidi-dev libfontconfig1-dev libfreetype6-dev libicu-dev libsodium-dev
+        sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libharfbuzz-dev libfribidi-dev libfontconfig1-dev libfreetype6-dev libicu-dev libsodium-dev libpng-dev libtiff5-dev
         
     - name: Instalar Pandoc
       run: |
@@ -40,10 +50,8 @@ jobs:
         Rscript -e 'install.packages("stringi", type = "source")'
       env:
         R_LIBS_USER: ~/.R/library
-    - name: Verificar TinyTeX instalado
-      run: |
-        Rscript -e 'if (!requireNamespace("tinytex", quietly=TRUE)) { install.packages("tinytex") }'
-        Rscript -e 'print(tinytex::is_tinytex())'
+        
+
     - name: Reinstalar keyring
       run: |
         Rscript -e 'install.packages("keyring")'
