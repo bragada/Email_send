@@ -15,12 +15,13 @@ header-includes:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-install.packages("kableExtra")
-install.packages("knitr")
-install.packages("googlesheets4")
-install.packages("zoo")
-install.packages("tinytex")
-tinytex::install_tinytex(force = TRUE)
+#install.packages("kableExtra")
+#install.packages("knitr")
+#install.packages("googlesheets4")
+#install.packages("zoo")
+#install.packages("tinytex")
+
+#tinytex::install_tinytex(force = TRUE)
 library(aws.s3)
 library(tidyverse)
 library(janitor)
@@ -29,6 +30,7 @@ library(knitr)
 #library(googledrive)
 library(googlesheets4)
 library(zoo)
+(.packages())
 
 ```
 
