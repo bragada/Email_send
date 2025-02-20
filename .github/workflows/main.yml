@@ -1,5 +1,5 @@
 
-name: Conecta 
+name: Teste
 
 on:
   workflow_dispatch:
